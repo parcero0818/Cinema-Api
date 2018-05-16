@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,19 +32,22 @@ public class CinemaRest {
 		this.salasRepository = salasRepository;
 	}
 
+	@CrossOrigin
 	@GetMapping
 	private List<TblSucursales> getSucursales() {
 		return sucursalesRepository.findAll();
 	}
 
-	@PostMapping(value = "/addSala")
-	public ResponseEntity<?> addSala(@RequestBody TblSalas sala) {
+	@CrossOrigin
+	@PostMapping(value = "/addSala", consumes = "application/json")
+	public String addSala(@RequestBody TblSalas sala) {
+		System.out.println(sala.getNumeroFilas());
 		try {
 			salasRepository.save(sala);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return "200";
 		}catch (Exception e) {
 			// TODO: handle exception
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return "500";
 		}
 	}
 }
